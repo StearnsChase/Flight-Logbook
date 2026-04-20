@@ -10,7 +10,7 @@ from myflightbook_api.schemas.common import ORMModel
 
 
 TelemetryFormatName = Literal["airbly", "baju", "csv", "gpx", "igc", "kml", "nmea", "unknown"]
-ParseStatusName = Literal["queued", "processing", "parsed", "failed"]
+ParseStatusName = Literal["queued", "processing", "parsed", "processed", "failed"]
 
 
 class TelemetryUploadRead(ORMModel):

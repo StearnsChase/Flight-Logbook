@@ -30,6 +30,7 @@ class ParseStatus(str, enum.Enum):
     QUEUED = "queued"
     PROCESSING = "processing"
     PARSED = "parsed"
+    PROCESSED = "processed"
     FAILED = "failed"
 
 

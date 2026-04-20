@@ -1,0 +1,254 @@
+.panel {
+  display: grid;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.heading {
+  display: grid;
+  gap: 10px;
+  max-width: 68ch;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--ink-soft);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.summary {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.primaryAction {
+  min-width: 148px;
+}
+
+.statusCard,
+.tableCard {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.statusCard {
+  padding: 24px;
+}
+
+.statusTitle {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+.statusCopy {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.tableCard {
+  overflow: hidden;
+}
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.table thead th {
+  color: var(--ink-soft);
+  text-align: left;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(19, 36, 59, 0.04);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.primaryCell {
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.routeCell {
+  min-width: 220px;
+}
+
+.numericHeader,
+.numericCell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.paginationLabel {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.paginationActions {
+  display: flex;
+  gap: 12px;
+}
+
+.paginationButton {
+  min-width: 118px;
+}
+
+.paginationButtonDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(19, 36, 59, 0.08);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.skeletonHeading {
+  display: grid;
+  gap: 10px;
+  width: min(620px, 100%);
+}
+
+.skeletonKicker {
+  width: 114px;
+  height: 12px;
+}
+
+.skeletonTitle {
+  width: min(220px, 60%);
+  height: 38px;
+}
+
+.skeletonLine {
+  width: 100%;
+  height: 14px;
+}
+
+.skeletonLineShort {
+  width: 72%;
+  height: 14px;
+}
+
+.skeletonAction {
+  width: 148px;
+  height: 46px;
+}
+
+.skeletonTable {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+  overflow: hidden;
+}
+
+.skeletonRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.8fr 0.9fr 0.9fr 0.7fr;
+  gap: 14px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.skeletonRow:last-child {
+  border-bottom: 0;
+}
+
+.skeletonCell {
+  height: 14px;
+}
+
+.skeletonCellShort {
+  width: 70%;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 840px) {
+  .header,
+  .pagination,
+  .skeletonHeader {
+    flex-direction: column;
+  }
+
+  .primaryAction,
+  .paginationActions {
+    width: 100%;
+  }
+
+  .paginationActions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .paginationButton,
+  .skeletonAction {
+    width: 100%;
+  }
+
+  .skeletonRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

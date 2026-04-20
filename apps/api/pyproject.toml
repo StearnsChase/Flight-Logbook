@@ -9,11 +9,13 @@ description = "FastAPI backend for the MyFlightbook migration platform."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+  "aioboto3>=13.0.0",
   "alembic>=1.16.5",
   "asyncpg>=0.30.0",
   "fastapi>=0.116.1",
   "geoalchemy2>=0.18.0",
   "httpx>=0.28.1",
+  "pyjwt[crypto]>=2.12.1",
   "pydantic-settings>=2.10.1",
   "psycopg[binary]>=3.2.10",
   "pymysql>=1.1.1",

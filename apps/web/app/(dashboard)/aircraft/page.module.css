@@ -1,0 +1,249 @@
+.panel {
+  display: grid;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.heading {
+  display: grid;
+  gap: 10px;
+  max-width: 64ch;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--ink-soft);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.summary {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.placeholderButton {
+  min-width: 164px;
+}
+
+.placeholderButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  box-shadow: none;
+  transform: none;
+}
+
+.fleetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.aircraftCard,
+.statusCard,
+.skeletonCard {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.aircraftCard {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.statusCard {
+  padding: 24px;
+}
+
+.statusTitle {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+}
+
+.statusCopy {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.tailBadge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 8px 12px;
+  border: 1px solid rgba(217, 93, 57, 0.28);
+  background: rgba(217, 93, 57, 0.12);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+
+.timestamp {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.cardHeading {
+  display: grid;
+  gap: 6px;
+}
+
+.aircraftName {
+  margin: 0;
+  font-size: 1.45rem;
+  letter-spacing: -0.04em;
+}
+
+.aircraftModel {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.metaLabel {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.metaValue {
+  margin: 6px 0 0;
+  font-size: 1rem;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: rgba(19, 36, 59, 0.06);
+  border: 1px solid rgba(19, 36, 59, 0.08);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.skeletonCard {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(19, 36, 59, 0.08);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonKicker {
+  width: 96px;
+  height: 12px;
+}
+
+.skeletonTitle {
+  width: min(220px, 70%);
+  height: 36px;
+}
+
+.skeletonLine,
+.skeletonLineShort,
+.skeletonCardTitle {
+  height: 14px;
+}
+
+.skeletonLine {
+  width: 100%;
+}
+
+.skeletonLineShort {
+  width: 72%;
+}
+
+.skeletonButton {
+  width: 164px;
+  height: 46px;
+}
+
+.skeletonBadge {
+  width: 88px;
+  height: 30px;
+}
+
+.skeletonCardTitle {
+  width: 68%;
+  height: 28px;
+}
+
+.skeletonMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.skeletonChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skeletonChip {
+  width: 92px;
+  height: 28px;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 840px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .placeholderButton,
+  .skeletonButton {
+    width: 100%;
+  }
+}

@@ -20,6 +20,13 @@ def test_database_enum_values_use_lowercase_payload_values() -> None:
         "nmea",
         "unknown",
     ]
+    assert TelemetryUpload.__table__.c.parse_status.type.enums == [
+        "queued",
+        "processing",
+        "parsed",
+        "processed",
+        "failed",
+    ]
     assert ImageAsset.__table__.c.media_type.type.enums == ["image", "pdf", "video"]
 
 

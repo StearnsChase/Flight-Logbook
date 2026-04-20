@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
+from myflightbook_api.api.dependencies.auth import VerifiedIdentity
+from myflightbook_api.core.auth import IdentityConflictError, IdentityProvisioningError, provision_user_from_identity
+from myflightbook_api.core.config import get_settings
 from myflightbook_api.db.dependencies import get_db_session
-from myflightbook_api.models.user import Identity, IdentityProvider, User
-from myflightbook_api.schemas.auth import AuthBootstrapRequest, AuthBootstrapResponse, IdentityLinkRead
+from myflightbook_api.schemas.auth import AuthBootstrapResponse, IdentityLinkRead
 from myflightbook_api.schemas.profile import ProfileRead
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -15,59 +15,24 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.get("/providers")
 async def list_providers() -> dict[str, list[str]]:
-    return {"providers": ["google", "apple"]}
+    return {"providers": get_settings().enabled_oidc_providers}
 
 
-@router.post("/bootstrap", response_model=AuthBootstrapResponse)
-async def bootstrap_auth(
-    payload: AuthBootstrapRequest,
-    session: AsyncSession = Depends(get_db_session)
+@router.post("/bootstrap", response_model=AuthBootstrapResponse, deprecated=True)
+@router.post("/login", response_model=AuthBootstrapResponse)
+async def login_with_oidc(
+    verified_identity: VerifiedIdentity,
+    session: AsyncSession = Depends(get_db_session),
 ) -> AuthBootstrapResponse:
-    provider = IdentityProvider(payload.provider)
-    query = (
-        select(Identity)
-        .options(selectinload(Identity.user))
-        .where(Identity.provider == provider, Identity.provider_subject == payload.provider_subject)
-    )
-    result = await session.execute(query)
-    identity = result.scalar_one_or_none()
-    is_new_user = False
-
-    if identity is None:
-        user_result = await session.execute(select(User).where(User.email == payload.email))
-        user = user_result.scalar_one_or_none()
-        if user is None:
-            user = User(
-                email=payload.email,
-                display_name=payload.display_name,
-                given_name=payload.given_name,
-                family_name=payload.family_name
-            )
-            session.add(user)
-            await session.flush()
-            is_new_user = True
-
-        identity = Identity(
-            user=user,
-            provider=provider,
-            provider_subject=payload.provider_subject,
-            email_verified=payload.email_verified
-        )
-        session.add(identity)
-    else:
-        user = identity.user
-
-    user.display_name = payload.display_name
-    user.given_name = payload.given_name
-    user.family_name = payload.family_name
-    user.email = payload.email
-
-    await session.commit()
-    await session.refresh(user)
-    await session.refresh(identity)
+    try:
+        user, identity, is_new_user = await provision_user_from_identity(session, verified_identity)
+    except IdentityProvisioningError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except IdentityConflictError as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
     return AuthBootstrapResponse(
         user=ProfileRead.model_validate(user),
         identity=IdentityLinkRead.model_validate(identity),
-        is_new_user=is_new_user
+        is_new_user=is_new_user,
     )
