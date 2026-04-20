@@ -317,6 +317,26 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+.next/
+.turbo/
+dist/
+coverage/
+.tmp/
+.tools/
+.venv/
+.pytest_cache/
+*.egg-info/
+.ruff_cache/
+.mypy_cache/
+pytest-cache-files-*/
+apps/api/.env
+apps/web/.env.local
+apps/web/.env
+apps/web/playwright-report/
+apps/web/test-results/
+apps/web/.next/
+infra/minio-data/
+packages/api-client/dist/
 
 # Typescript v1 declaration files
 typings/

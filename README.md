@@ -1,6 +1,25 @@
 # MyFlightbookWeb
 The website and services for MyFlightbook. This provides the back-end for the mobile apps as well.
 
+## Migration Workspace
+This repo now also contains a side-by-side migration bootstrap for the new stack:
+
+- `apps/api`: FastAPI + SQLAlchemy + Alembic backend
+- `apps/web`: Next.js TypeScript frontend
+- `apps/worker`: background worker scaffold for telemetry/media processing
+- `packages/api-client`: shared TypeScript API contract package
+- `docs/migration`: migration notes, legacy contract inventory, and parity scaffolding
+- `infra/docker-compose.yml`: local Postgres/PostGIS and MinIO services
+
+The legacy .NET application remains intact and is still the reference/import source while the new platform is built out.
+
+### Local Migration Dev Stack
+- `powershell -ExecutionPolicy Bypass -File .\scripts\dev-up.ps1 -Seed` boots the local migration stack, runs Alembic, starts MinIO, FastAPI, and Next.js, then seeds the demo records.
+- `powershell -ExecutionPolicy Bypass -File .\scripts\dev-down.ps1` stops the local migration web, API, and MinIO processes started from this repo.
+- `powershell -ExecutionPolicy Bypass -File .\scripts\dev-seed.ps1` re-applies the idempotent demo seed without creating duplicate demo records.
+- `powershell -ExecutionPolicy Bypass -File .\scripts\import-legacy.ps1 -LimitUsers 25` runs the first-pass legacy MySQL import for users, aircraft, flights, and mapping rows once the legacy connection settings are present in `apps/api/.env`.
+- The local stack assumes PostgreSQL 16 is installed as a Windows service and that the API virtualenv already exists at `apps/api/.venv`.
+
  ## Getting Started
  ### Setting up the website
  * Run on any Windows machine with ASP.NET 4.5 or later.

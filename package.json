@@ -1,0 +1,23 @@
+{
+  "name": "myflightbook-migration-workspace",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "packages/api-client"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @myflightbook/api-client && npm run build --workspace @myflightbook/web",
+    "dev:down": "powershell -ExecutionPolicy Bypass -File .\\scripts\\dev-down.ps1",
+    "dev:seed": "powershell -ExecutionPolicy Bypass -File .\\scripts\\dev-seed.ps1",
+    "dev:up": "powershell -ExecutionPolicy Bypass -File .\\scripts\\dev-up.ps1 -Seed",
+    "dev:web": "npm run dev --workspace @myflightbook/web",
+    "generate:client": "npm run generate --workspace @myflightbook/api-client",
+    "import:legacy": "powershell -ExecutionPolicy Bypass -File .\\scripts\\import-legacy.ps1",
+    "lint:web": "npm run lint --workspace @myflightbook/web",
+    "test:web": "npm run test --workspace @myflightbook/web"
+  },
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  }
+}

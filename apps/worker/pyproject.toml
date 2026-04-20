@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myflightbook-worker"
+version = "0.1.0"
+description = "Background worker scaffold for MyFlightbook telemetry and media jobs."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "pydantic-settings>=2.10.1"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
