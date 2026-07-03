@@ -158,6 +158,21 @@ class S3StorageService:
 
         return presigned_url
 
+    async def upload_bytes(self, object_key: str, data: bytes, content_type: str) -> None:
+        normalized_key = self._normalize_object_key(object_key)
+        normalized_content_type = self._normalize_content_type(content_type)
+        payload = self._normalize_payload(data)
+
+        async with self.client() as client:
+            await _maybe_await(
+                client.put_object(
+                    Bucket=self.config.bucket_name,
+                    Key=normalized_key,
+                    Body=payload,
+                    ContentType=normalized_content_type,
+                )
+            )
+
     async def delete_object(self, object_key: str) -> None:
         normalized_key = self._normalize_object_key(object_key)
 
@@ -181,6 +196,21 @@ class S3StorageService:
             raise ValueError("content_type is required")
         return normalized_content_type
 
+    def _normalize_payload(self, data: bytes | bytearray | memoryview) -> bytes:
+        if isinstance(data, memoryview):
+            normalized_payload = data.tobytes()
+        elif isinstance(data, bytearray):
+            normalized_payload = bytes(data)
+        elif isinstance(data, bytes):
+            normalized_payload = data
+        else:
+            raise TypeError("data must be bytes-like")
+
+        if not normalized_payload:
+            raise ValueError("data is required")
+
+        return normalized_payload
+
 
 @lru_cache
 def get_storage_service() -> S3StorageService:
@@ -189,6 +219,10 @@ def get_storage_service() -> S3StorageService:
 
 async def generate_presigned_upload_url(object_key: str, content_type: str) -> str:
     return await get_storage_service().generate_presigned_upload_url(object_key, content_type)
+
+
+async def upload_bytes(object_key: str, data: bytes, content_type: str) -> None:
+    await get_storage_service().upload_bytes(object_key, data, content_type)
 
 
 async def delete_object(object_key: str) -> None:

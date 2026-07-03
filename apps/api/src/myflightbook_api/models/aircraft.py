@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import Boolean, ForeignKey, String
+from datetime import datetime
+
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from myflightbook_api.db.base import Base
@@ -19,6 +21,17 @@ class Aircraft(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     is_complex: Mapped[bool] = mapped_column(Boolean, default=False)
     is_high_performance: Mapped[bool] = mapped_column(Boolean, default=False)
     is_retractable: Mapped[bool] = mapped_column(Boolean, default=False)
+    last_altimeter: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_vor: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_static: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_transponder: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_annual: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_elt: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    registration_due: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    public_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    private_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    user_flags: Mapped[int] = mapped_column(Integer, default=0)
+    revision: Mapped[int] = mapped_column(Integer, default=0)
 
     owner: Mapped["User"] = relationship(back_populates="aircraft")
     flights: Mapped[list["Flight"]] = relationship(back_populates="aircraft")

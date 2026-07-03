@@ -60,13 +60,18 @@ class Settings(BaseSettings):
 
     project_name: str = "MyFlightbook API"
     api_v1_prefix: str = "/api/v1"
+    debug: bool = False
     database_url: str = "postgresql+asyncpg://myflightbook:myflightbook@127.0.0.1:5432/myflightbook"
+    redis_url: str = "redis://127.0.0.1:6379/0"
     sql_echo: bool = False
     cors_origins: list[str] = Field(default_factory=lambda: ["http://127.0.0.1:3000", "http://localhost:3000"])
     s3_endpoint: str = "http://127.0.0.1:9000"
     s3_bucket: str = "myflightbook"
     s3_access_key: str = "myflightbook"
     s3_secret_key: str = "myflightbook"
+    sentry_dsn: str | None = None
+    sentry_environment: str | None = None
+    healthcheck_timeout_seconds: float = 2.0
     default_demo_email: str = "demo@myflightbook.local"
     oidc_google_client_ids: list[str] = Field(default_factory=list)
     oidc_apple_client_ids: list[str] = Field(default_factory=list)

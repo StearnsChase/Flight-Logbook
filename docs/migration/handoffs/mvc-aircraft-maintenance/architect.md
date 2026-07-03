@@ -1,0 +1,61 @@
+﻿## Slice
+- `maintenance flow` from `AircraftController.cs`
+
+## Source Of Truth
+- `MyFlightbook.Web/Areas/mvc/Controllers/AircraftController.cs`
+- Flow: `maintenance flow`
+
+## Originating Change
+- none
+
+## Approved Evidence Reviewed
+- `docs/migration/repo-completion-protocol.md`
+- `docs/migration/parity-status-ledger.md`
+- `docs/changes/approved-change-register.md`
+- `docs/migration/contract-inventory.md`
+- `docs/migration/execution-playbook.md`
+- `docs/infrastructure/local-dev.md`
+- current scanner output: empty
+- current `git status --short`
+- legacy file: `MyFlightbook.Web/Areas/mvc/Controllers/AircraftController.cs` (`maintenance flow`)
+- current-stack file: `apps/api/src/myflightbook_api/api/routes/aircraft.py`
+- current-stack file: `apps/web/src/components/aircraft-composer.tsx`
+
+## Current-Stack Touchpoints
+- `apps/api/src/myflightbook_api/api/routes/aircraft.py`: current aircraft route boundary and nearest edit and maintenance seam
+- `apps/web/src/components/aircraft-composer.tsx`: current aircraft UI anchor for model selection and edit scaffolding
+
+## In Scope
+- preserve the exact controller-flow boundary named in the ledger for `maintenance flow`.
+- keep the new-stack work limited to the route, page, redirect, partial-render, or export behavior exercised by this one MVC flow.
+- preserve request gating, returned data or file shape, and side effects inside the exact flow boundary.
+
+## Out Of Scope
+- other actions in `AircraftController.cs` outside the selected `maintenance flow` row.
+- broad UI redesign or multi-controller consolidation.
+- changing the parity target for adjacent MVC rows.
+
+## Acceptance Criteria
+- the new stack has a bounded scaffold for the exact `maintenance flow` flow and nothing broader.
+- the proof path satisfies the ledger target for this row: `service tests + ui parity`.
+- the row does not silently absorb unrelated actions from `AircraftController.cs`.
+
+## Fixtures And Proof
+- capture the exact controller-flow inputs and outputs needed to satisfy the ledger proof target: `service tests + ui parity`.
+- store any new fixtures or golden outputs under `apps/api/tests/fixtures/mvc/mvc-aircraft-maintenance/`.
+- prove the row with the smallest truthful combination of route tests, service tests, file-export fixtures, or UI parity checks once the exact route segment exists.
+- if the flow depends on session-heavy or partial-render behavior that cannot be bounded inside this one row without redefining adjacent rows, stop and return the row to Architect.
+
+## Environment
+- `Windows fast path`: the selected row can be planned and initially proven inside the API and web workspace without starting Redis or the worker.
+
+## Escalation Risks
+- the current web app is still at a thin-shell stage, so if implementing `maintenance flow` requires rowizing additional route families before this flow can be bounded, stop with `blocked on contract`.
+- if another worker materially reshapes `apps/api/src/myflightbook_api/api/routes/aircraft.py` or `apps/web/src/components/aircraft-composer.tsx` before scaffolding begins, re-check conflicting workspace state.
+
+## Feature Handoff Payload
+- Target TODO location: `apps/api/src/myflightbook_api/api/routes/aircraft.py`
+- `TODO (Codex): scaffold the exact new-stack service or route boundary needed for maintenance flow, scope limit to mvc-aircraft-maintenance only, proof target service tests + ui parity for the single MVC flow`
+- Target TODO location: `apps/web/src/components/aircraft-composer.tsx`
+- `TODO (Codex): scaffold the minimal web entry point, route shell, or client wiring needed for maintenance flow, scope limit to mvc-aircraft-maintenance only, proof target bounded parity checks for the exact MVC flow`
+

@@ -10,6 +10,7 @@ class _FakeS3Client:
     def __init__(self) -> None:
         self.presign_calls: list[dict[str, object]] = []
         self.delete_calls: list[dict[str, object]] = []
+        self.put_calls: list[dict[str, object]] = []
 
     def generate_presigned_url(self, **kwargs):
         self.presign_calls.append(kwargs)
@@ -18,6 +19,10 @@ class _FakeS3Client:
     async def delete_object(self, **kwargs):
         self.delete_calls.append(kwargs)
         return {"DeleteMarker": True}
+
+    async def put_object(self, **kwargs):
+        self.put_calls.append(kwargs)
+        return {"ETag": "abc123"}
 
 
 class _FakeClientContext:
@@ -94,6 +99,35 @@ async def test_delete_object_calls_bucket_and_key() -> None:
 
     assert fake_session.client_instance.delete_calls == [
         {"Bucket": "myflightbook", "Key": "images/demo.jpg"}
+    ]
+
+
+@pytest.mark.asyncio
+async def test_upload_bytes_calls_bucket_key_and_payload() -> None:
+    fake_session = _FakeSession()
+    service = S3StorageService(
+        config=S3StorageConfig(
+            bucket_name="myflightbook",
+            endpoint_url=None,
+            access_key_id=None,
+            secret_access_key=None,
+            session_token=None,
+            region_name="us-east-1",
+            presigned_upload_ttl_seconds=900,
+        ),
+        session_factory=lambda: fake_session,
+        client_config_factory=lambda endpoint_url: None,
+    )
+
+    await service.upload_bytes("images/demo.jpg", b"demo-bytes", "image/jpeg")
+
+    assert fake_session.client_instance.put_calls == [
+        {
+            "Bucket": "myflightbook",
+            "Key": "images/demo.jpg",
+            "Body": b"demo-bytes",
+            "ContentType": "image/jpeg",
+        }
     ]
 
 

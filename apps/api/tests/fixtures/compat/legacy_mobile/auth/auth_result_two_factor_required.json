@@ -1,0 +1,24 @@
+{
+  "legacy_source": "MyFlightbook.Web/AppCode/WebService.cs::AuthTokenForUserNew",
+  "notes": "Users with a registered second factor return a TwoFactorCodeRequired result until a valid code is supplied.",
+  "current_time": "2026-04-20T12:00:00Z",
+  "authorized_clients": ["ios-client"],
+  "users": [
+    {
+      "username": "pilot",
+      "email": "pilot@example.com",
+      "password": "secret-pass",
+      "two_factor_secret": "246810"
+    }
+  ],
+  "request": {
+    "app_token": "ios-client",
+    "username": "pilot",
+    "password": "secret-pass"
+  },
+  "expected": {
+    "result": "TwoFactorCodeRequired",
+    "auth_token_present": false,
+    "decoded_user": null
+  }
+}

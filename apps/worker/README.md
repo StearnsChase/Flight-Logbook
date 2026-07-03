@@ -1,25 +1,42 @@
 # MyFlightbook Worker
 
-This package is the background-processing home for work that does not belong in the request path.
+This package handles background processing that does not belong on the request path.
 
-## Intended responsibilities
+## Intended Responsibilities
 
 - telemetry parsing jobs
 - media transcoding and thumbnail jobs
 - legacy import replay batches
-- parity-comparison and shadow-run orchestration
+- parity-comparison and shadow-run orchestration when a slice needs async execution
 
-## Current state
+## Current Runtime
 
-The foundational scaffold uses `arq` with Redis as the broker:
+The current worker implementation uses:
 
-- async worker runtime that matches the FastAPI/SQLAlchemy stack
-- Redis-backed queue for telemetry and media jobs
-- a dummy `process_telemetry` task that marks an upload `processing`, sleeps for two seconds, and then marks it `processed`
-- a `generate_thumbnails` media task that downloads an image from S3-compatible storage, writes `_thumb.jpg` and `_web.jpg` variants, and uploads them back to the bucket
+- `arq` as the worker runtime
+- Redis as the broker
+- Postgres for persisted state transitions
+- S3-compatible storage for media and telemetry files
 
-## Running locally
+Current tasks include:
 
-1. Install the package in a virtualenv with `pip install -e .`.
-2. Ensure PostgreSQL, Redis, and the S3-compatible bucket are reachable using the values in `.env`.
-3. Start the worker with `python -m myflightbook_worker.main`.
+- `process_telemetry`, which moves uploads through processing states
+- `generate_thumbnails`, which creates `_thumb.jpg` and `_web.jpg` variants and uploads them back to storage
+
+## Local Startup
+
+### Full Parity Path
+
+Use:
+
+`docker compose -f .\infra\docker-compose.yml up -d postgres redis minio worker`
+
+This is the normal way to run the worker locally.
+
+### Manual Startup
+
+If backing services are already running, start the worker with:
+
+`python -m myflightbook_worker.main`
+
+The Windows fast path in `dev-up.ps1` does not start Redis or the worker.

@@ -1,0 +1,31 @@
+{
+  "legacy_source": "MyFlightbook.Web/AppCode/WebService.cs::AuthTokenForUserNew",
+  "notes": "When emulating another account, the support user's second factor is validated but the returned token resolves to the emulated account.",
+  "current_time": "2026-04-20T12:00:00Z",
+  "authorized_clients": ["ios-client"],
+  "users": [
+    {
+      "username": "student",
+      "email": "student@example.com",
+      "password": "student-pass"
+    },
+    {
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin-pass",
+      "can_support": true,
+      "two_factor_secret": "999000"
+    }
+  ],
+  "request": {
+    "app_token": "ios-client",
+    "username": "student:admin",
+    "password": "admin-pass",
+    "two_factor_code": "999000"
+  },
+  "expected": {
+    "result": "Success",
+    "auth_token_present": true,
+    "decoded_user": "student"
+  }
+}
